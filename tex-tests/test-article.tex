@@ -142,20 +142,43 @@
 \author{Rafael Serrano-Quintero\thanks{Departamento de Fundamentos del An{\'a}lisis Econ{\'o}mico (FAE), Universidad de Alicante, Campus San Vicente, 03690, Alicante, Spain. Email: \href{mailto:r.serrano@ua.es}{r.serrano@ua.es}} \\
 Universidad de Alicante}
 
-\date{\textbf{This Version:} \today \\} \\
+\date{\textbf{This Version:} \today \\
 \href{test_tex.pdf}{\textsc{\textbf{Latest Version}}}}
 
 
 \begin{document}
 \maketitle
 
-This is the first paragraph of a random paper. I'm testing citations as in \citet{buera2018skillbiasedstructchange}.
+\section{Introduction}
+
+This is the first paragraph of a random paper. I'm testing citations as in \citep{rodrik2004hindugrowth,sivasubramonian2004humancapital,hsieh2009misallocation,broadberry2010historical,eichengreen2011servicegrowth,verma2012tfp,ziebarth2013misallocation,garciasantana2014reservationlaws}. \cite{acemoglu2008capitaldeepening,raurich2018labormobility,swiecki2017determinants}.
 
 Now I test equations:
 
 \[
 \frac{x}{1-x} = \int^1_0 \log(x-1) dx
 \]
+
+This seems to be working just fine. 
+
+Testing environment snippets:
+
+\begin{equation}
+	\tag{Trade Share}
+	\pi_{dni}(j) = \frac{\int^1_0 p_{dni}(j)c_{dni}(j) dj}{\displaystyle\sum_{k\in N} \int^1_0 p_{dnk}(j)c_{dnk}(j) dj}
+	\label{eq:pi_dni}
+\end{equation}
+
+If we make a reference to the equation... \eqref{eq:pi_dni}.
+
+\section{Model}
+
+\section{Empirical Evidence}
+
+\subsection{Long-Run Trends}
+
+\section{Conclusion}
+
 
 \bibliography{bibtex-test.bib}
 \bibliographystyle{ecta}

@@ -1,0 +1,12 @@
+# Intermediate useless files
+*.synctex.gz
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log 
+*.nav
+*.out
+*.snm
+*.toc
