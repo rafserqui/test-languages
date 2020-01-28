@@ -1,0 +1,160 @@
+%========================================================================================
+% Slides style
+\documentclass[10pt,xcolor={svgnames}]{beamer}
+\usetheme[progressbar=frametitle]{metropolis}
+\setbeamercovered{transparent}
+
+%========================================================================================
+% Color specifications
+%========================================================================================
+\definecolor{GreyishBlue}{HTML}{087E8B} 	% Headings color
+\definecolor{CitationsBlue}{HTML}{61B2B3} 	% Color for citations
+
+\setbeamercolor{palette primary}{bg=GreyishBlue,fg=white}
+\setbeamercolor{palette secondary}{bg=GreyishBlue,fg=white}
+\setbeamercolor{palette tertiary}{bg=GreyishBlue,fg=white}
+\setbeamercolor{palette quaternary}{bg=GreyishBlue,fg=white}
+\setbeamercolor{structure}{fg=GreyishBlue} % itemize, enumerate, etc
+\setbeamercolor{section in toc}{fg=GreyishBlue} % TOC sections
+\setbeamercolor{background canvas}{bg=white}
+
+%========================================================================================
+% Numeration in environments
+%========================================================================================
+\setbeamertemplate{theorems}[numbered]
+\setbeamertemplate{definitions}[numbered]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+
+\usepackage{appendixnumberbeamer}
+
+%========================================================================================
+% Language and font settings
+%========================================================================================
+\usepackage[english,activeacute]{babel} % Language
+\usefonttheme{professionalfonts}		% Avoid overwriting fonts
+
+%========================================================================================
+% Math font settings
+%========================================================================================
+\usepackage{mathpazo}					% Math font
+\usepackage{amsmath,amsfonts,amssymb}	% Math symbols
+\usepackage{dsfont}						% Math symbols like R for reals...
+
+%========================================================================================
+% References' colors and PDF properties
+%========================================================================================
+\usepackage{hyperref}
+\hypersetup
+{
+    pdfauthor={Rafael Serrano-Quintero},
+    pdfsubject={Structural transformation in India: The Role of the Service Sector},
+    colorlinks = {true},
+    linkcolor = {},
+    citecolor = {CitationsBlue}, %{RoyalBlue}
+    urlcolor = {CitationsBlue}, %{RoyalBlue}
+}
+
+%========================================================================================
+% Additional packages
+%========================================================================================
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{appendix}
+\usepackage{marvosym}
+\usepackage{enumerate} %For enumerating with letters with option [a)]
+\usepackage{epstopdf}
+\usepackage{natbib}
+\usepackage[flushleft]{threeparttable}
+\usepackage{booktabs}
+\usepackage[super]{nth}
+\usepackage{float}
+\usepackage{subfigure}
+
+%========================================================================================
+% Stata Preamble for Tables
+%========================================================================================
+
+\newcommand{\sym}[1]{\rlap{#1}}% Thanks to David Carlisle
+
+\let\estinput=\input% define a new input command so that we can still flatten the document
+
+\newcommand{\estwide}[3]{
+		\vspace{.75ex}{
+			\begin{tabular*}
+			{\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
+			\toprule
+			\estinput{#1}
+			\bottomrule
+			\addlinespace[.75ex]
+			\end{tabular*}
+			}
+		}
+
+\newcommand{\estauto}[3]{
+		\vspace{.75ex}{
+			\begin{tabular}{l*{#2}{#3}}
+			\toprule
+			\estinput{#1}
+			\bottomrule
+			\addlinespace[.75ex]
+			\end{tabular}
+			}
+		}
+
+% Allow line breaks with \\ in specialcells
+	\newcommand{\specialcell}[2][c]{%
+	\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+% *****************************************************************
+% Custom subcaptions
+% *****************************************************************
+% Note/Source/Text after Tables
+\newcommand{\figtext}[1]{
+	\vspace{-1.9ex}
+	\captionsetup{justification=justified,font=footnotesize}
+	\caption*{\hspace{6pt}\hangindent=1.5em #1}
+	}
+\newcommand{\fignote}[1]{\caption*{\footnotesize\emph{Note:~}~#1}}
+
+\newcommand{\figsource}[1]{\figtext{\emph{Source:~}~#1}}
+
+% Add significance note with \starnote
+\newcommand{\starnote}{\figtext{* p < 0.1, ** p < 0.05, *** p < 0.01. Standard errors in parentheses.}}
+
+% *****************************************************************
+% siunitx
+% *****************************************************************
+\usepackage{siunitx} % centering in tables
+	\sisetup{
+		detect-mode,
+		tight-spacing           = true,
+		group-digits            = false ,
+		input-signs             = ,
+		input-symbols           = ( ) [ ] - + *,
+		input-open-uncertainty  = ,
+		input-close-uncertainty = ,
+		table-align-text-post   = false
+        }
+
+\newcommand{\source}[1]{\caption*{\tiny Note: {#1}} }
+
+%========================================================================================
+% DOCUMENT
+%========================================================================================
+
+\begin{document}
+\title[]{\textbf{Structural transformation in India: The Role of the Service Sector}}
+\author[Rafael Serrano]{\textbf{Rafael Serrano Quintero} \\
+Fundamentos del An\'alisis Econ\'omico (FAE) \\
+University of Alicante}
+\date[]{\nth{44} SAEe}
+
+\AtBeginSection[]{\frame{\sectionpage}}
+\AtBeginSubsection[]{\frame{\subsectionpage}}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\end{document}
