@@ -18,7 +18,7 @@ fun <- function(var1, var2) {
     var3 <- var1 + var2
     var4 <- 1 + 2
     for (var5 in 1:10) {
-       var1 + var2 + var3 + var5
+       var1 + var2 + var3 + var4 + var5
     }
   } else {
     var1 - y
