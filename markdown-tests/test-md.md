@@ -39,11 +39,12 @@ We want to link to the [World Bank][worldbank database] several times. Now we re
 [worldbank database]: data.worldbank.org
 
 ## Images
-Images also have two styles, just like links, and both of them render the exact same way. The difference between links and images is that images are prefaced with an exclamation point (` ! `).
 
-The first image style is called an inline image link. To create an inline image link, enter an exclamation point (` ! `), wrap the alt text in brackets (`[ ]`), and then wrap the link in parenthesis (`( )`). (Alt text is a phrase or sentence that describes the image for the visually impaired.)
+Images also have two styles, just like links, and both of them render the exact same way. The difference between links and images is that images are prefaced with an exclamation point (`!`).
 
-For example, to create an inline image link to https://octodex.github.com/images/bannekat.png, with an alt text that says, Benjamin Bannekat, you'd write this in Markdown: `![Benjamin Bannekat](https://octodex.github.com/images/bannekat.png)`. Here it is
+The first image style is called an inline image link. To create an inline image link, enter an exclamation point (`!`), wrap the alt text in brackets (`[ ]`), and then wrap the link in parenthesis (`( )`). (Alt text is a phrase or sentence that describes the image for the visually impaired.)
+
+For example, to create an inline image link to [https://octodex.github.com/images/bannekat.png](https://octodex.github.com/images/bannekat.png), with an alt text that says, Benjamin Bannekat, you'd write this in Markdown: `![Benjamin Bannekat](https://octodex.github.com/images/bannekat.png)`. Here it is
 
 ![Benjamin Bannekat](https://octodex.github.com/images/bannekat.png)
 
