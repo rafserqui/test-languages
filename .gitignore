@@ -10,3 +10,13 @@
 *.out
 *.snm
 *.toc
+
+# Shapefiles
+*.shp
+*.dbf
+*.prj
+*.cpg
+*.shx
+
+**/IDN_adm/
+**/.ipynb_checkpoints/
