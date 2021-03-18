@@ -46,17 +46,13 @@ name: introduction
 ---
 # Introduction
 
-### Me
+### Who I am
 
 `r fa('address-book')` [Rafael Serrano](https://sites.google.com/view/rserranoquintero)
 
 `r fa('envelope')` [r.serrano@ua.es](mailto:r.serrano@ua.es)
 
 `r fa('graduation-cap')` Postdoctoral Researcher (macroeconomics and growth)
-
-### You
-
-A quick roundtable of names, fields/interests, and coding background.
 
 ---
 class: inverse, center, middle
