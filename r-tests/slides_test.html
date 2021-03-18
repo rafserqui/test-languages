@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Test Presentation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Rafael Serrano-Quintero" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="libs/remark-css/metropolis-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Test Presentation
+## RMarkdown and Xaringan Package
+### Rafael Serrano-Quintero
+### Department of Economics
+### Universitat de Barcelona
+
+---
+
+
+
+
+# Test Xaringan
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+
+2. [Empirical Evidence](#empirics)
+
+3. [Model](#model)
+
+4. [Quantitative Exercises](#quantmodel)
+
+5. [Conclusion](#conclusions)
+
+---
+class: inverse, center, middle
+name: introduction
+
+# Introduction
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color = '#EB811B' size = 1px width = 796px&gt;&lt;/html&gt;
+
+---
+# Introduction
+
+### Me
+
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="rfa" style="height:0.75em;fill:currentColor;position:relative;"&gt;&lt;path d="M436 160c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h320c26.5 0 48-21.5 48-48v-48h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20c6.6 0 12-5.4 12-12v-40c0-6.6-5.4-12-12-12h-20v-64h20zm-228-32c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zm112 236.8c0 10.6-10 19.2-22.4 19.2H118.4C106 384 96 375.4 96 364.8v-19.2c0-31.8 30.1-57.6 67.2-57.6h5c12.3 5.1 25.7 8 39.8 8s27.6-2.9 39.8-8h5c37.1 0 67.2 25.8 67.2 57.6v19.2z"/&gt;&lt;/svg&gt; [Rafael Serrano](https://sites.google.com/view/rserranoquintero)
+
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="rfa" style="height:0.75em;fill:currentColor;position:relative;"&gt;&lt;path d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z"/&gt;&lt;/svg&gt; [r.serrano@ua.es](mailto:r.serrano@ua.es)
+
+&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="rfa" style="height:0.75em;fill:currentColor;position:relative;"&gt;&lt;path d="M622.34 153.2L343.4 67.5c-15.2-4.67-31.6-4.67-46.79 0L17.66 153.2c-23.54 7.23-23.54 38.36 0 45.59l48.63 14.94c-10.67 13.19-17.23 29.28-17.88 46.9C38.78 266.15 32 276.11 32 288c0 10.78 5.68 19.85 13.86 25.65L20.33 428.53C18.11 438.52 25.71 448 35.94 448h56.11c10.24 0 17.84-9.48 15.62-19.47L82.14 313.65C90.32 307.85 96 298.78 96 288c0-11.57-6.47-21.25-15.66-26.87.76-15.02 8.44-28.3 20.69-36.72L296.6 284.5c9.06 2.78 26.44 6.25 46.79 0l278.95-85.7c23.55-7.24 23.55-38.36 0-45.6zM352.79 315.09c-28.53 8.76-52.84 3.92-65.59 0l-145.02-44.55L128 384c0 35.35 85.96 64 192 64s192-28.65 192-64l-14.18-113.47-145.03 44.56z"/&gt;&lt;/svg&gt; Postdoctoral Researcher (macroeconomics and growth)
+
+### You
+
+A quick roundtable of names, fields/interests, and coding background.
+
+---
+class: inverse, center, middle
+name: empirics
+
+# Empirical Evidence
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color = '#EB811B' size = 1px width = 796px&gt;&lt;/html&gt;
+
+---
+# Data
+
+- We present the *Star Wars Database* from `dplyr` package
+- R chunk codes are shown as well
+
+```r
+library(dplyr)
+
+data(starwars, package = "dplyr")
+
+summ_tab &lt;- starwars %&gt;%
+                filter(species == "Human") %&gt;%
+                    group_by(homeworld) %&gt;%
+                        summarise(mean_height = mean(height))
+```
+---
+# Data
+
+## Tables
+
+- We can use `kable` to show nicely formatted tables
+
+
+```r
+kable(summ_tab)
+```
+
+
+
+|homeworld    | mean_height|
+|:------------|-----------:|
+|Alderaan     |    176.3333|
+|Bespin       |    175.0000|
+|Bestine IV   |    180.0000|
+|Chandrila    |    150.0000|
+|Concord Dawn |    183.0000|
+|Corellia     |    175.0000|
+|Coruscant    |    168.5000|
+|Eriadu       |    180.0000|
+|Haruun Kal   |    188.0000|
+|Kamino       |    183.0000|
+|Naboo        |    168.4000|
+|Serenno      |    193.0000|
+|Socorro      |    177.0000|
+|Stewjon      |    182.0000|
+|Tatooine     |    179.2500|
+|NA           |          NA|
+---
+# Regressions
+
+## Regress Height on Mass
+
+
+```r
+bodymass &lt;- lm(height ~ 1 + mass, data = starwars)
+tab_coefs &lt;- coef(summary(bodymass))
+
+kable(tab_coefs)
+```
+
+
+
+|            |    Estimate| Std. Error|   t value| Pr(&gt;&amp;#124;t&amp;#124;)|
+|:-----------|-----------:|----------:|---------:|------------------:|
+|(Intercept) | 171.2853609|  5.3434010| 32.055495|          0.0000000|
+|mass        |   0.0280705|  0.0275204|  1.019986|          0.3120447|
+---
+# Plots
+
+
+```r
+fit &lt;- lm(dist ~ 1 + speed, data = cars)
+par(mar = c(4, 4, 1, .1))
+plot(cars, pch = 19, col = "darkgray", las = 1)
+abline(fit, lwd = 2)
+```
+
+![](slides_test_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+---
+class: inverse, center, middle
+name: model
+
+# Model
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color = '#EB811B' size = 1px width = 796px&gt;&lt;/html&gt;
+
+---
+# Main Equation
+
+### Writing Mathematical Expressions
+
+1. In double dollar signs `$$`
+2. Write in one line, not splitted
+3. Test matrices as well
+
+`$$w_i L_{di} = \beta_{di}\sum_{j\in\mathcal{N}} \omega_d^{\rho}\left(T_{ji}\kappa_{di}\right)^{1-\sigma} A_{di}^{\sigma - 1}P_{dj}^{\sigma - \rho}P_j^{\rho - 1}\nu(w_j L_j + b_j E_j)$$`
+
+`$$\begin{pmatrix}
+1 &amp; 2 &amp; 3 \\
+\sigma-1 &amp; \rho &amp; \beta(1-\sigma)\rho \\
+\sigma-\rho &amp; 0 &amp; 9
+\end{pmatrix}$$`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
