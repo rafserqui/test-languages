@@ -1,0 +1,82 @@
+---
+title: "Introduction to R Markdown"
+author: "Rafael Serrano-Quintero"
+output:
+  tufte::tufte_handout: default
+---
+
+We import the necessary libraries, set the working directory, import the data, and change a bit some of the names and types of variables for further manipulation. The last line shows the first rows of the dataframe.
+
+```{r}
+# Remove everything
+rm(list = ls())
+
+# Load necessary libraries
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(epiDisplay)
+library(ggplot2)
+
+# Set working directory
+user <- 1
+if (user == 1) {
+    setwd("D:/RESEARCH/test-languages/r-tests")
+} else if (user == 2) {
+    setwd(
+    "C:/Users/rafse/Documents/RESEARCH/test-languages/r-tests")
+} else if (user == 3) {
+    setwd(
+    "/home/rafserqui/Documents/Research/test-languages/r-tests")
+}
+
+fpath <- "./data/emp.xlsx"
+
+df <- read_excel(fpath, sheet = 1, range = "A1:I1001")
+
+df <- df %>%
+    rename(emp_count = 9, gender = 2, name = 1, hwage = 8) %>%
+    mutate(gender = as.factor(gender),
+    emp_count = as.numeric(emp_count))
+
+head(df)
+```
+
+Now we compute the mean, median, and standard deviation of the employment count variable.
+
+```{r}
+# Aggregate
+mean(df$emp_count)
+median(df$emp_count)
+sd(df$emp_count)
+```
+
+What if we would like to summarize by gender and compute confidence intervals?
+
+```{r}
+# By sex
+summ <- df %>%
+    group_by(gender) %>%
+    summarize(
+        means = mean(emp_count),
+        medians = median(emp_count),
+        stds = sd(emp_count),
+        obs = n(),
+        error = qnorm(0.975) * stds / sqrt(obs),
+        lb = means - error,
+        ub = means + error
+    )
+View(summ)
+```
+
+Finally, we compute a table of frequencies and perform a $\mathcal{T}-$test for comparing means of hourly wage for men and women.
+
+```{r}
+# Table of frequencies
+emp_interv <- cut(df$emp_count,
+        breaks = seq(0, 6000, 500))
+tab1(emp_interv, cum.percent = TRUE)
+
+# T-Test
+t.test(hwage ~ gender, data = df)
+```

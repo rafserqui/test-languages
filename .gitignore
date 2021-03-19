@@ -20,3 +20,6 @@
 
 **/IDN_adm/
 **/.ipynb_checkpoints/
+
+**/r-tests/rmarkdown-xaringan/libs/
+**/r-tests/rmarkdown-beamer/cache/
