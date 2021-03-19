@@ -1,0 +1,141 @@
+---
+title: "Test Presentation"
+subtitle: "RMarkdown and Xaringan Package"
+author: "Rafael Serrano-Quintero"
+institute: "Department of Economics"
+date: "University of Alicante"
+output:
+    xaringan::moon_reader:
+        css: ["default", "default-fonts", "./css/my_xaringan_css.css"]
+        lib_dir: libs
+        nature:
+            ratio: '16:9'
+            highlightStyle: github
+            countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+library(tidyverse)
+library(hrbrthemes)
+library(fontawesome)
+library(knitr)
+```
+
+# Test Xaringan
+
+## Table of Contents
+
+1. [Introduction](#introduction)
+
+2. [Empirical Evidence](#empirics)
+
+3. [Model](#model)
+
+4. [Quantitative Exercises](#quantmodel)
+
+5. [Conclusion](#conclusions)
+
+---
+class: inverse, center, middle
+name: introduction
+
+# Introduction
+
+---
+# Introduction
+
+### Who I am
+
+`r fa('address-book')` [Rafael Serrano](https://sites.google.com/view/rserranoquintero)
+
+`r fa('envelope')` [r.serrano@ua.es](mailto:r.serrano@ua.es)
+
+`r fa('graduation-cap')` Postdoctoral Researcher (macroeconomics and growth)
+
+---
+class: inverse, center, middle
+name: empirics
+
+# Empirical Evidence
+
+---
+# Data
+
+- We present the *Star Wars Database* from `dplyr` package
+- R chunk codes are shown as well
+```{r}
+library(dplyr)
+
+data(starwars, package = "dplyr")
+
+summ_tab <- starwars %>%
+                filter(species == "Human") %>%
+                    group_by(homeworld) %>%
+                        summarise(mean_height = mean(height))
+```
+---
+# Data
+
+### Tables
+
+- We can use `datatable()` to show nicely formatted tables
+
+```{r}
+DT::datatable(summ_tab,
+  fillContainer = FALSE,
+  options = list(pageLength = 3))
+```
+---
+# Regressions
+
+### Regress Height on Mass
+
+```{r}
+bodymass <- lm(height ~ 1 + mass, data = starwars)
+tab_coefs <- coef(summary(bodymass))
+
+kable(tab_coefs)
+```
+---
+# Plots
+
+```{r, fig.width=15, fig.height=5}
+fit <- lm(dist ~ 1 + speed, data = cars)
+par(mar = c(4, 4, 1, .1))
+plot(cars, pch = 19, col = "darkgray", las = 1)
+abline(fit, lwd = 2)
+```
+---
+class: inverse, center, middle
+name: model
+
+# Model
+
+---
+# Main Equation
+
+### Writing Mathematical Expressions
+
+1. In double dollar signs `$$`
+2. Write in one line, not splitted
+3. Test matrices as well
+
+$$w_i L_{di} = \beta_{di}\sum_{j\in\mathcal{N}} \omega_d^{\rho}\left(T_{ji}\kappa_{di}\right)^{1-\sigma} A_{di}^{\sigma - 1}P_{dj}^{\sigma - \rho}P_j^{\rho - 1}\nu(w_j L_j + b_j E_j)$$
+
+$$\begin{pmatrix}
+1 & 2 & 3 \\
+\sigma-1 & \rho & \beta(1-\sigma)\rho \\
+\sigma-\rho & 0 & 9
+\end{pmatrix}$$
+
+---
+# Exporting to PDF
+
+- Use `pagedown::chrome_print()`
+- Needs a Chromium browser installed
+- Produces a PDF of the slides
+
+```{r}
+#pagedown::chrome_print("test_xaringan.html")
+```

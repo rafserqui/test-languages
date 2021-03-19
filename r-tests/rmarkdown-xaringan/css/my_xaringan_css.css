@@ -1,0 +1,52 @@
+/* Let's load some fonts */
+
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css);
+
+body { font-family: 'Fira Sans' }
+
+a, a > code {
+  color: #F66733;
+  text-decoration: none;
+}
+
+.inverse {
+  background-color: #ffffff;
+  text-shadow: none;
+  color: #087E8B;
+}
+
+.inverse h1, .inverse h2, .inverse h3 {
+  color: #087E8B;
+}
+
+.remark-inline-code {
+  font-family: 'Fira Code';
+  background-color: #F5F5F5;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.hljs-github .hljs {
+    font-family: 'Fira Code';
+    border-radius: 10px;
+    background: #F5F5F5;
+}
+
+.title-slide h1, h2 {
+	color: #087E8B;
+}
+
+.title-slide h3 {
+  font-weight: normal;
+	color: #000;
+}
+
+.title-slide h4 {
+  font-weight: normal;
+	color: #000;
+}
+
+.title-slide .remark-slide-number {
+  display: none;
+}
