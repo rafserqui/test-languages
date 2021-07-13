@@ -2,7 +2,7 @@
 title: "Introduction to R Markdown"
 author: "Rafael Serrano-Quintero"
 output:
-  tufte::tufte_html: default
+  tufte::tufte_handout: default
 ---
 
 We import the necessary libraries, set the working directory, import the data, and change a bit some of the names and types of variables for further manipulation. The last line shows the first rows of the dataframe.
@@ -19,7 +19,7 @@ library(epiDisplay)
 library(ggplot2)
 
 # Set working directory
-user <- 3
+user <- 1
 if (user == 1) {
     setwd("D:/RESEARCH/test-languages/r-tests")
 } else if (user == 2) {
