@@ -1,4 +1,4 @@
-mutable struct model_params{tt1 <: Real, tt2 <: Real, tt3 <: AbstractArray{<:Real}, tt4 <: AbstractArray{<:Real}, tt5, tt6 <: AbstractArray{<: Real}, tt7 <: AbstractArray{<: Real}}
+mutable struct model_params{tt1 <: Float64, tt2 <: Int64, tt3 <: AbstractArray{<:Float64}, tt4 <: AbstractArray{<:Float64}, tt5, tt6 <: AbstractArray{<: Float64}, tt7 <: AbstractArray{<: Float64}}
     rho  :: tt1
     sigm :: tt1
     bbi  :: tt1
@@ -23,29 +23,13 @@ mutable struct model_params{tt1 <: Real, tt2 <: Real, tt3 <: AbstractArray{<:Rea
 end
 
 # Infrastructure struct
-mutable struct infrastructure{tt1 <: AbstractArray{<: Real}, tt2 <: AbstractArray{<: Real}}
+mutable struct infrastructure{tt1 <: AbstractArray{<: Float64}, tt2 <: AbstractArray{<: Float64}}
     In :: tt1
     Vi :: tt2
 end
 
-# Algorithm parameters
-mutable struct algo_params{tt1 <: Real, tt2 <: Real}
-    tol_epsi  :: tt1          # Convergence criterion    
-    difference:: tt1          # Initial difference
-    maxit     :: tt2          # Max number of iterations
-    it        :: tt2          # Iteration counter
-    ucoeff    :: tt1          # Updating coefficient
-end
-
-# Guesses
-mutable struct guess{tt1 <: AbstractArray{<:Real}}
-    Li0 :: tt1
-    wi0 :: tt1
-    bi0 :: tt1
-end
-
 # Equilibirum
-mutable struct eqbm_output{tt1 <: AbstractArray{<:Real}, tt3 <: AbstractArray{<:Real}}
+mutable struct eqbm_output{tt1 <: AbstractArray{<:Float64}, tt3 <: AbstractArray{<:Float64}}
     Li  :: tt1
     Pi  :: tt1
     Ub  :: tt1

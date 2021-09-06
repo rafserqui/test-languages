@@ -83,9 +83,9 @@ function factor_prices_disp(x0,params,Ai,Li,tol)
 
         # Eqn (22) in model-beta-locations.pdf
         wi_e = (1 ./ Li).*(params.betas[1].*params.nu.*XIpia + params.betas[2].*params.nu.*XIpim + params.betas[3].*params.nu.*XIpis)
-        wi_e = (wi_e./sum(wi_e, dims = 1)).*params.NN.*1e1
+        wi_e = (wi_e./sum(wi_e, dims = 1)).*params.NN
 
-        bi_e = ((wi_e.*Li)./(params.nu.*params.Ei)).*(1 - nu .+ ((1-params.betas[1])./params.betas[1]).*(Lai./Li) .+ ((1-params.betas[2])./params.betas[2]).*(Lmi./Li) .+ ((1-params.betas[3])./params.betas[3]).*(Lsi./Li))
+        bi_e = ((wi_e.*Li)./(params.nu.*params.Ei)).*(1 - params.nu .+ ((1-params.betas[1])./params.betas[1]).*(Lai./Li) .+ ((1-params.betas[2])./params.betas[2]).*(Lmi./Li) .+ ((1-params.betas[3])./params.betas[3]).*(Lsi./Li))
         bi_e[bi_e .== NaN] .= 0
     
         # Compute deviations
@@ -107,7 +107,7 @@ function factor_prices_disp(x0,params,Ai,Li,tol)
 
     x = hcat(wi, bi)
 
-    return x, maxdev, it
+    return x
 end
 
 function labor_update_guess_disp(wi,bi,Pi,L,Li0,params)
@@ -143,18 +143,9 @@ function labor_update_guess_disp(wi,bi,Pi,L,Li0,params)
     return Li, Ubar, Ub
 end
 
-function endog_eqbm_dispersion(params,guess,infrastructure)
+function endog_eqbm_dispersion(params,infrastructure)
     # Parse parameters
-    rho   = params.rho
-    sigm  = params.sigm
-    oma   = params.oma
-    omm   = params.omm
-    oms   = params.oms
-    betas = params.betas
-    T     = params.T
-    Ei    = params.Ei
     L     = params.L
-    nu    = params.nu
     delG  = params.delG
     phi   = params.phi
     Amat  = params.Amat
@@ -169,7 +160,7 @@ function endog_eqbm_dispersion(params,guess,infrastructure)
     Gi = electricity_quality(delG,Vi,phi)
     
     # Algorithm parameters
-    tol_epsi = 1e-9     # Convergence criterion    
+    tol_epsi = 1e-7     # Convergence criterion    
     difference = Inf    # Initial difference
     maxit = 1e7         # Max number of iterations
     it = 1              # Iteration counter
@@ -181,9 +172,9 @@ function endog_eqbm_dispersion(params,guess,infrastructure)
     show_output = true
 
     # Initial guesses
-    Li0 = guess.Li0
-    wi0 = guess.wi0
-    bi0 = guess.bi0
+    Li0 = ones(NN,1).*(L/NN)
+    wi0 = ones(NN,1)
+    bi0 = ones(NN,1)
 
     x0 = hcat(wi0,bi0)
 
@@ -197,7 +188,7 @@ function endog_eqbm_dispersion(params,guess,infrastructure)
         Ai, Ri = tfp_spill(Amat,Li0,Gi,I,Tnet,alphT,iotT,muT,gamm)
         
         # Solve {wi,bi} such that (36) and (37) hold in model
-        x, maxdev, it_fp = factor_prices_disp(x0,params,Ai,Li0,tol_epsi)
+        x = factor_prices_disp(x0,params,Ai,Li0,tol_epsi)
 
         wi = x[:,1]
         bi = x[:,2]
