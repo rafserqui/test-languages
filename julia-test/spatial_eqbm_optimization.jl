@@ -11,7 +11,7 @@ include("eqbm_functions.jl")
 Random.seed!(1234)
 
 # Geography
-const N = 25
+const N = 8
 const NN = N^2
 
 # Spatial TFPs
@@ -62,7 +62,8 @@ cgamm = 0.84
 cphi = 0.28
 
 # Randomness on ruggedness of terrain
-rugg = ones(N,N)
+rugg = randn(N,N)
+rugg = exp.(rugg) ./ exp.(1.0 .+ exp.(rugg))
 rugg = N.*ones(size(rugg))./rugg
 rugg = 10.0 ./ rugg
 
@@ -138,4 +139,123 @@ writedlm("sim_tfps.csv", cAmat, ',')
 writedlm("sim_nuis.csv", cnui, ',')
 writedlm("sim_tcst.csv", cT, ',')
 
-init_eqbm = @time endog_eqbm_dispersion(mparams,infras)
+teq = endog_eqbm_dispersion(mparams,infras)
+const Gi = electricity_quality(mparams.delG,infras.Vi,mparams.phi)
+Ai, Ri = tfp_spill(mparams.Amat,teq.Li,Gi,infras.In,mparams.G,mparams.alphT,mparams.iotT,mparams.muT,mparams.gamm)
+#-------------------------------------
+# SMM
+#-------------------------------------
+emp_moms = zeros(14,1)
+
+# Thresholds for moments
+thresh = zeros(5,3)
+thresh[1,:] = [0.25.*mean(teq.Li./sum(teq.Li)) mean(teq.Li./sum(teq.Li)) 0.85.*maximum(teq.Li./sum(teq.Li))];
+thresh[2,:] = [0.25.*maximum(Gi) 0.5.*maximum(Gi) 0.85*maximum(Gi)];
+thresh[3,:] = [0.25.*maximum(Ri) 0.5.*maximum(Ri) 0.85*maximum(Ri)];
+thresh[4,:] = [0.0 0.35 0.0];
+thresh[5,:] = [0.0 0.25 0.0];
+
+# Labor
+emp_moms[1] =
+        sum(teq.Li./cL .< thresh[1,1]) ./ NN;
+emp_moms[2] =
+        sum((teq.Li./cL .>= thresh[1,1]) .* (teq.Li./cL .< thresh[1,2])) ./ NN;
+emp_moms[3] =
+        sum((teq.Li./cL .>= thresh[1,2]) .* (teq.Li./cL .< thresh[1,3])) ./ NN;
+emp_moms[4] =
+        sum(teq.Li./cL .>= thresh[1,3]) ./ NN;
+
+# Quality of Electricity
+emp_moms[5] = sum(Gi .< thresh[2,1]) ./ NN;
+emp_moms[6] = sum((Gi .>= thresh[2,1]) .* (Gi .< thresh[2,2])) ./ NN;
+emp_moms[7] = sum((Gi .>= thresh[2,2]) .* (Gi .< thresh[2,3])) ./ NN;
+emp_moms[8] = sum(Gi .>= thresh[2,3]) ./ NN;
+
+# Quality of Roads
+emp_moms[9] = sum(Ri .< thresh[3,1]) ./ NN;
+emp_moms[10] = (sum((Ri .>= thresh[3,1]) .* (Ri .< thresh[3,2]))) ./ NN;
+emp_moms[11] = (sum((Ri .>= thresh[3,2]) .* (Ri .< thresh[3,3]))) ./ NN;
+emp_moms[12] = sum(Ri .>= thresh[3,3]) ./ NN;
+
+# Employment Shares
+emp_moms[13] = sum(teq.Ldn[:,1] .>= thresh[4,2]) ./ NN;
+emp_moms[14] = sum(teq.Ldn[:,2] .>= thresh[5,2]) ./ NN;
+
+# Initial guess for parameters
+priors = zeros(9,1);
+priors[1] = 0.13;
+priors[2] = 0.08;
+priors[3] = 0.02;
+
+priors[4] = 0.13;
+priors[5] = 0.08;
+priors[6] = 0.02;
+
+priors[7] = 0.05;
+priors[8] = 0.01;
+priors[9] = 0.01;
+
+function functionEqbm(x, Aas::Array{Float64, 1}, Ams::Array{Float64, 1}, Ass::Array{Float64, 1})
+    # Parameters to simulate eqbm with random TFPs
+    alp_est = x[1:3]
+    iot_est = x[4:6]
+    mu_est  = x[7:9]
+
+    # Construct parameter struct
+    mestp = model_params(crho,csigm,cbbi,cnu,coma,comm,coms,cgamm,cphi,cL,NN,
+                        cbetas,alp_est,iot_est,mu_est,cT,cdelG,cTnet,cEi,cnui,
+                        hcat(Aas, Ams, Ass));
+
+    # Solve the model
+    seq = endog_eqbm_dispersion(mestp,infras);   
+    
+    # Compute model objects
+    Gisim = electricity_quality(mestp.delG,infras.Vi,mestp.phi);
+
+    Ai, Risim = tfp_spill(mestp.Amat,seq.Li,Gi,infras.In,mestp.G,mestp.alphT,mestp.iotT,mestp.muT,mestp.gamm);
+
+    #--------------------------------------------
+    # Moments
+    #--------------------------------------------
+    output = zeros(14,1);
+
+    # Labor
+    output[1] =
+            sum(seq.Li./cL .< thresh[1,1]) ./ NN;
+    output[2] =
+            sum((seq.Li./cL .>= thresh[1,1]) .* (seq.Li./cL .< thresh[1,2])) ./ NN;
+    output[3] =
+            sum((seq.Li./cL .>= thresh[1,2]) .* (seq.Li./cL .< thresh[1,3])) ./ NN;
+    output[4] =
+            sum(seq.Li./cL .>= thresh[1,3]) ./ NN;
+    
+    # Quality of Electricity
+    output[5] = sum(Gisim .< thresh[2,1]) ./ NN;
+    output[6] = sum((Gisim .>= thresh[2,1]) .* (Gisim .< thresh[2,2])) ./ NN;
+    output[7] = sum((Gisim .>= thresh[2,2]) .* (Gisim .< thresh[2,3])) ./ NN;
+    output[8] = sum(Gisim .>= thresh[2,3]) ./ NN;
+    
+    # Quality of Roads
+    output[9] = sum(Risim .< thresh[3,1]) ./ NN;
+    output[10] = sum((Risim .>= thresh[3,1]) .* (Risim .< thresh[3,2])) ./ NN;
+    output[11] = sum((Risim .>= thresh[3,2]) .* (Risim .< thresh[3,3])) ./ NN;
+    output[12] = sum(Risim .>= thresh[3,3]) ./ NN;
+    
+    # Employment Shares
+    output[13] = sum(seq.Ldn[:,1] .>= thresh[4,2]) ./ NN;
+    output[14] = sum(seq.Ldn[:,2] .>= thresh[5,2]) ./ NN;
+
+    return output
+end
+
+# Draw shocks for TFPs
+S = 5
+Aas = zeros(NN,S);
+Ams = zeros(NN,S);
+Ass = zeros(NN,S);
+for s=1:S
+    Aasim, Amsim, Assim = spatial_tfps(N,-2.6);
+    Aas[:,s] = reshape(Aasim,NN,1);
+    Ams[:,s] = reshape(Assim,NN,1);
+    Ass[:,s] = reshape(Amsim,NN,1);
+end
