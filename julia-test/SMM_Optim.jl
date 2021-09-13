@@ -1,6 +1,6 @@
 using Distributed
 addprocs(4)
-cd("/home/rafserqui/Documents/Research/test-languages/julia-test/")
+cd("D:/RESEARCH/test-languages/julia-test/")
 
 # Add all functions and parameters necessary for estimation
 @everywhere include("spatial_eqbm_optimization.jl")
@@ -20,10 +20,11 @@ function parallel_moments(x)
     return QQ[1,1]
 end
 
-using Optim
+using BlackBoxOptim
 #LBFGS(), autodiff=:forward
 function MSM()
-  out = optimize(parallel_moments,priors,NelderMead())
+  out = bboptimize(parallel_moments; SearchRange = (0.0001, 0.5), NumDimensions = 9)
+  #out = optimize(parallel_moments,priors,NelderMead())
   
   # Show result of the estimation
   println(out)
@@ -32,5 +33,8 @@ end
 
 # Perform MSM
 pars_smm = MSM()
-Optim.minimizer(pars_smm)
-Optim.x_converged(pars_smm)
+bs = best_candidate(pars_smm)
+bf = best_fitness(pars_smm)
+#pars_smm = MSM()
+#Optim.minimizer(pars_smm)
+#Optim.x_converged(pars_smm)

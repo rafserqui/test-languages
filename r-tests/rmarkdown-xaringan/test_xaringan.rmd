@@ -137,5 +137,5 @@ $$\begin{pmatrix}
 - Produces a PDF of the slides
 
 ```{r}
-#pagedown::chrome_print("test_xaringan.html")
+pagedown::chrome_print("test_xaringan.html")
 ```
