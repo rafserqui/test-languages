@@ -1,4 +1,4 @@
-using Random, LinearAlgebra, Statistics, FFTW, Plots, FastMarching, LightGraphs, SimpleWeightedGraphs
+using Parameters, Random, LinearAlgebra, Statistics, FFTW, Plots, FastMarching, LightGraphs, SimpleWeightedGraphs
 
 # User-defined inputs
 cd("/home/rafserqui/Documents/Research/test-languages/julia-test/")
@@ -128,7 +128,31 @@ cL = 100; # Total population
 cnui = reshape(spatial_amenities(N),NN,1);
 
 # Initialize parameters
-const mparams = model_params(crho,csigm,cbbi,cnu,coma,comm,coms,cgamm,cphi,cL,NN,cbetas,calphT,ciotT,cmuT,cT,cdelG,cTnet,cEi,cnui,cAmat);
+mparams = (
+        rho = crho,
+        sigm = csigm,
+        bbi = cbbi,
+        nu = cnu,
+        oma = coma,
+        omm = comm,
+        oms = coms,
+        gamm = cgamm,
+        phi = cphi,
+        L = cL,
+        NN = NN,
+        betas = cbetas,
+        alphT = calphT,
+        iotT = ciotT,
+        muT = cmuT,
+        T = cT,
+        delG = cdelG,
+        Tnet = cTnet,
+        Ei = cEi,
+        nui = cnui,
+        Amat = cAmat,
+)
+
+#const mparams = model_params(crho,csigm,cbbi,cnu,coma,comm,coms,cgamm,cphi,cL,NN,cbetas,calphT,ciotT,cmuT,cT,cdelG,cTnet,cEi,cnui,cAmat);
 
 Vi0 = Z/(2.001*NN).*ones(NN,1);
 infras = infrastructure(I0,Vi0);
@@ -140,16 +164,18 @@ writedlm("sim_nuis.csv", cnui, ',')
 writedlm("sim_tcst.csv", cT, ',')
 
 teq = endog_eqbm_dispersion(mparams,infras)
-const Gi = electricity_quality(mparams.delG,infras.Vi,mparams.phi)
-Ai, Ri = tfp_spill(mparams.Amat,teq.Li,Gi,infras.In,mparams.G,mparams.alphT,mparams.iotT,mparams.muT,mparams.gamm)
+const Gi = electricity_quality(mparams,infras.Vi)
+Ai, Ri = tfp_spill(mparams,teq.Li,Gi,infras.In)
+
 #-------------------------------------
 # SMM
 #-------------------------------------
 emp_moms = zeros(14,1)
 
 # Thresholds for moments
+@unpack Li, Ldn = teq
 thresh = zeros(5,3)
-thresh[1,:] = [0.25.*mean(teq.Li./sum(teq.Li)) mean(teq.Li./sum(teq.Li)) 0.85.*maximum(teq.Li./sum(teq.Li))];
+thresh[1,:] = [0.25.*mean(Li./sum(Li)) mean(Li./sum(Li)) 0.85.*maximum(Li./sum(Li))];
 thresh[2,:] = [0.25.*maximum(Gi) 0.5.*maximum(Gi) 0.85*maximum(Gi)];
 thresh[3,:] = [0.25.*maximum(Ri) 0.5.*maximum(Ri) 0.85*maximum(Ri)];
 thresh[4,:] = [0.0 0.35 0.0];
@@ -157,13 +183,13 @@ thresh[5,:] = [0.0 0.25 0.0];
 
 # Labor
 emp_moms[1] =
-        sum(teq.Li./cL .< thresh[1,1]) ./ NN;
+        sum(Li./cL .< thresh[1,1]) ./ NN;
 emp_moms[2] =
-        sum((teq.Li./cL .>= thresh[1,1]) .* (teq.Li./cL .< thresh[1,2])) ./ NN;
+        sum((Li./cL .>= thresh[1,1]) .* (Li./cL .< thresh[1,2])) ./ NN;
 emp_moms[3] =
-        sum((teq.Li./cL .>= thresh[1,2]) .* (teq.Li./cL .< thresh[1,3])) ./ NN;
+        sum((Li./cL .>= thresh[1,2]) .* (Li./cL .< thresh[1,3])) ./ NN;
 emp_moms[4] =
-        sum(teq.Li./cL .>= thresh[1,3]) ./ NN;
+        sum(Li./cL .>= thresh[1,3]) ./ NN;
 
 # Quality of Electricity
 emp_moms[5] = sum(Gi .< thresh[2,1]) ./ NN;
@@ -178,11 +204,11 @@ emp_moms[11] = (sum((Ri .>= thresh[3,2]) .* (Ri .< thresh[3,3]))) ./ NN;
 emp_moms[12] = sum(Ri .>= thresh[3,3]) ./ NN;
 
 # Employment Shares
-emp_moms[13] = sum(teq.Ldn[:,1] .>= thresh[4,2]) ./ NN;
-emp_moms[14] = sum(teq.Ldn[:,2] .>= thresh[5,2]) ./ NN;
+emp_moms[13] = sum(Ldn[:,1] .>= thresh[4,2]) ./ NN;
+emp_moms[14] = sum(Ldn[:,2] .>= thresh[5,2]) ./ NN;
 
 # Initial guess for parameters
-priors = zeros(9,1);
+priors = 1.0 * ones(9,1)
 priors[1] = 0.13;
 priors[2] = 0.08;
 priors[3] = 0.02;
@@ -195,24 +221,43 @@ priors[7] = 0.05;
 priors[8] = 0.01;
 priors[9] = 0.01;
 
-function functionEqbm(x, Aas::Array{Float64, 1}, Ams::Array{Float64, 1}, Ass::Array{Float64, 1})
+function functionEqbm(x, Asim::AbstractArray{<:Real})
     # Parameters to simulate eqbm with random TFPs
-    alp_est = x[1:3]
-    iot_est = x[4:6]
-    mu_est  = x[7:9]
+    alp_est = collect(x[1:3])
+    iot_est = collect(x[4:6])
+    mu_est  = collect(x[7:9])
 
     # Construct parameter struct
-    mestp = model_params(crho,csigm,cbbi,cnu,coma,comm,coms,cgamm,cphi,cL,NN,
-                        cbetas,alp_est,iot_est,mu_est,cT,cdelG,cTnet,cEi,cnui,
-                        hcat(Aas, Ams, Ass));
+    mestp = (rho = crho,
+        sigm = csigm,
+        bbi = cbbi,
+        nu = cnu,
+        oma = coma,
+        omm = comm,
+        oms = coms,
+        gamm = cgamm,
+        phi = cphi,
+        L = cL,
+        NN = NN,
+        betas = cbetas,
+        alphT = alp_est,
+        iotT = iot_est,
+        muT = mu_est,
+        T = cT,
+        delG = cdelG,
+        Tnet = cTnet,
+        Ei = cEi,
+        nui = cnui,
+        Amat = Asim);
 
     # Solve the model
-    seq = endog_eqbm_dispersion(mestp,infras);   
-    
-    # Compute model objects
-    Gisim = electricity_quality(mestp.delG,infras.Vi,mestp.phi);
+    seq = endog_eqbm_dispersion(mestp,infras);
+    @unpack Li, Ldn = seq
 
-    Ai, Risim = tfp_spill(mestp.Amat,seq.Li,Gi,infras.In,mestp.G,mestp.alphT,mestp.iotT,mestp.muT,mestp.gamm);
+    # Compute model objects
+    Gisim = electricity_quality(mestp,infras.Vi);
+
+    Ai, Risim = tfp_spill(mestp,Li,Gisim,infras.In);
 
     #--------------------------------------------
     # Moments
@@ -221,13 +266,13 @@ function functionEqbm(x, Aas::Array{Float64, 1}, Ams::Array{Float64, 1}, Ass::Ar
 
     # Labor
     output[1] =
-            sum(seq.Li./cL .< thresh[1,1]) ./ NN;
+            sum(Li./cL .< thresh[1,1]) ./ NN;
     output[2] =
-            sum((seq.Li./cL .>= thresh[1,1]) .* (seq.Li./cL .< thresh[1,2])) ./ NN;
+            sum((Li./cL .>= thresh[1,1]) .* (Li./cL .< thresh[1,2])) ./ NN;
     output[3] =
-            sum((seq.Li./cL .>= thresh[1,2]) .* (seq.Li./cL .< thresh[1,3])) ./ NN;
+            sum((Li./cL .>= thresh[1,2]) .* (Li./cL .< thresh[1,3])) ./ NN;
     output[4] =
-            sum(seq.Li./cL .>= thresh[1,3]) ./ NN;
+            sum(Li./cL .>= thresh[1,3]) ./ NN;
     
     # Quality of Electricity
     output[5] = sum(Gisim .< thresh[2,1]) ./ NN;
@@ -242,8 +287,8 @@ function functionEqbm(x, Aas::Array{Float64, 1}, Ams::Array{Float64, 1}, Ass::Ar
     output[12] = sum(Risim .>= thresh[3,3]) ./ NN;
     
     # Employment Shares
-    output[13] = sum(seq.Ldn[:,1] .>= thresh[4,2]) ./ NN;
-    output[14] = sum(seq.Ldn[:,2] .>= thresh[5,2]) ./ NN;
+    output[13] = sum(Ldn[:,1] .>= thresh[4,2]) ./ NN;
+    output[14] = sum(Ldn[:,2] .>= thresh[5,2]) ./ NN;
 
     return output
 end

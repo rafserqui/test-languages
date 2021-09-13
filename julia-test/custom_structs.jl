@@ -1,4 +1,4 @@
-mutable struct model_params{tt1 <: Float64, tt2 <: Int64, tt3 <: AbstractArray{<:Float64}, tt4 <: AbstractArray{<:Float64}, tt5, tt6 <: AbstractArray{<: Float64}, tt7 <: AbstractArray{<: Float64}}
+mutable struct model_params{tt1 <: Real, tt2 <: Real, tt8 <: AbstractArray{<:Real}, tt3 <: AbstractArray{<:Real}, tt4 <: AbstractArray{<:Real}, tt5, tt6 <: AbstractArray{<: Real}, tt7 <: AbstractArray{<: Real}}
     rho  :: tt1
     sigm :: tt1
     bbi  :: tt1
@@ -10,7 +10,7 @@ mutable struct model_params{tt1 <: Float64, tt2 <: Int64, tt3 <: AbstractArray{<
     phi  :: tt1
     L    :: tt2
     NN   :: tt2
-    betas:: tt3
+    betas:: tt8
     alphT:: tt3
     iotT :: tt3
     muT  :: tt3
@@ -23,7 +23,7 @@ mutable struct model_params{tt1 <: Float64, tt2 <: Int64, tt3 <: AbstractArray{<
 end
 
 # Infrastructure struct
-mutable struct infrastructure{tt1 <: AbstractArray{<: Float64}, tt2 <: AbstractArray{<: Float64}}
+mutable struct infrastructure{tt1 <: AbstractArray{<: Real}, tt2 <: AbstractArray{<: Float64}}
     In :: tt1
     Vi :: tt2
 end

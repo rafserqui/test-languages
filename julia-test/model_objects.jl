@@ -47,15 +47,18 @@ function transport_cost(delT,In,gamm,N,synth = true)
     return (T, G)
 end
 
-function electricity_quality(delG,Vi,phi)
+function electricity_quality(params,Vi)
     #------------------------------------------------
     # Compute quality of electricity
     #------------------------------------------------
+    @unpack delG, phi = params
     Gi = delG.*(Vi.^(phi))
     return Gi
 end
 
-function tfp_spill(Amat,Li,Gi,In,Tnet,alphT,iotT,muT,gamm)
+function tfp_spill(params,Li,Gi,In)
+    @unpack Amat, Tnet, alphT, iotT, muT = params
+    
     #------------------------------------------------
     # Compute composite TFP
     #------------------------------------------------
@@ -109,9 +112,9 @@ function trade_shares(params,Ai,wi,bi)
     npis = ((theta[3].*(wi.^(betas[3])).*(bi.^(1 .- betas[3])))./(Ai[:,3])).^(1-sigm)
     
     NNones = ones(1,NN)
-    num_pia = mul!(num_pia, npia, NNones)
-    num_pim = mul!(num_pim, npim, NNones)
-    num_pis = mul!(num_pis, npis, NNones)
+    num_pia = npia * NNones
+    num_pim = npim * NNones
+    num_pis = npis * NNones
     
     Tsig = T.^(1 - sigm)
 
@@ -127,9 +130,9 @@ function trade_shares(params,Ai,wi,bi)
     dpi_a = similar(num_pia)
     dpi_m = similar(num_pia)
     dpi_s = similar(num_pia)
-    dpi_a = mul!(dpi_a,NNones',sum(num_pia, dims = 1))
-    dpi_m = mul!(dpi_m,NNones',sum(num_pim, dims = 1))
-    dpi_s = mul!(dpi_s,NNones',sum(num_pis, dims = 1))
+    dpi_a = (NNones') * (sum(num_pia, dims = 1))
+    dpi_m = (NNones') * (sum(num_pim, dims = 1))
+    dpi_s = (NNones') * (sum(num_pis, dims = 1))
 
     # dnom_pi_d is an (N^2 x N^2) matrix with the same number in all rows for each column
 
@@ -165,7 +168,7 @@ function inner_price_index(params,Ai,wi,bi)
         
     # Add transport cost to each other location
     Pdn = similar(Pdn_temp)
-    Pdn  = mul!(Pdn,Tpow,Pdn_temp)
+    Pdn  = Tpow * Pdn_temp
     
     # Pan (N^2 x N^2).
     # Pan(i,j) = price produced in i and taken to j
@@ -204,9 +207,9 @@ function sectoral_employment_shares_disp(params,Ai,Li,wi,bi)
     XIpia = similar(XI[:,1])
     XIpim = similar(XI[:,1])
     XIpis = similar(XI[:,1])
-    XIpia = mul!(XIpia,pi_a,XI[:,1])
-    XIpim = mul!(XIpim,pi_m,XI[:,2])
-    XIpis = mul!(XIpis,pi_s,XI[:,3])
+    XIpia = pi_a * XI[:,1]
+    XIpim = pi_m * XI[:,2]
+    XIpis = pi_s * XI[:,3]
 
     #  Compute sectoral-employment levels
     Lai = (params.betas[1].*params.nu.*XIpia)./wi
