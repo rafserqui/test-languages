@@ -1,14 +1,33 @@
-%========================================================================================
-% Slides style
-\documentclass[10pt,xcolor={svgnames}]{beamer}
-\usetheme[progressbar=frametitle]{metropolis}
-\setbeamercovered{transparent}
+\documentclass[11pt,xcolor={svgnames},aspectratio=169,usepdftitle=false]{beamer}
 
-%========================================================================================
+% Add space in lists
+\let\toneitemize\itemize
+\let\ttwoitemize\enditemize
+\renewenvironment{itemize}{\toneitemize\addtolength{\itemsep}{0.7\baselineskip}}{\ttwoitemize}
+
+\let\toneenumer\enumerate
+\let\ttwoenumer\endenumerate
+\renewenvironment{enumerate}{\toneenumer\addtolength{\itemsep}{0.7\baselineskip}}{\ttwoenumer}
+
+% Alert color
+\setbeamercolor{alerted text}{fg=DarkOrange}
+
+% Itemize w bullets
+\setbeamertemplate{itemize items}{$\circ$}
+
+% Font size of title
+\setbeamerfont{title}{size=\huge}
+
+%===========================================================
 % Color specifications
-%========================================================================================
+%===========================================================
 \definecolor{GreyishBlue}{HTML}{087E8B} 	% Headings color
-\definecolor{CitationsBlue}{HTML}{61B2B3} 	% Color for citations
+\definecolor{CitationsBlue}{HTML}{0E86D4}%{2B6684} 	% Color for citations
+\definecolor{LinksPink}{HTML}{ff0054}       % Color for links
+
+% Template for syntax highlighting
+\definecolor{BeigeBackground}{HTML}{fdf6e3}
+\definecolor{BlueKeyWord}{HTML}{268bd2}
 
 \setbeamercolor{palette primary}{bg=GreyishBlue,fg=white}
 \setbeamercolor{palette secondary}{bg=GreyishBlue,fg=white}
@@ -17,63 +36,77 @@
 \setbeamercolor{structure}{fg=GreyishBlue} % itemize, enumerate, etc
 \setbeamercolor{section in toc}{fg=GreyishBlue} % TOC sections
 \setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{button}{bg=white, fg=GreyishBlue}
 
-%========================================================================================
+%===========================================================
+% Language and font settings
+%===========================================================
+\usepackage[english,activeacute]{babel} % Language
+\usefonttheme{professionalfonts}		% Avoid overwriting fonts
+
+\usepackage[sfdefault,light]{FiraSans}
+\usepackage[utf8]{inputenc}				% Special symbols
+\usepackage[T1]{fontenc}				% T1 Encoding of font
+
+%===========================================================
+% Math font settings
+%===========================================================
+\usepackage{mathpazo}					% Math font
+\usepackage{amsmath,amsfonts,amssymb,amsthm}	% Math symbols
+\usepackage{dsfont}						% Math symbols like R for reals...
+
+%===========================================================
 % Numeration in environments
-%========================================================================================
+%===========================================================
 \setbeamertemplate{theorems}[numbered]
+\undef{\definition}
+\newtheorem{definition}{Definition}
 \setbeamertemplate{definitions}[numbered]
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{caption}[numbered]
+\newtheorem{exercise}{Exercise}
 
 \usepackage{appendixnumberbeamer}
 
-%========================================================================================
-% Language font, and bibliography settings
-%========================================================================================
-\usepackage[english,activeacute]{babel} % Language
-\usefonttheme{professionalfonts}		% Avoid overwriting fonts
-\usepackage{natbib}
-
-%========================================================================================
-% Math font settings
-%========================================================================================
-\usepackage{mathpazo}					% Math font
-\usepackage{amsmath,amsfonts,amssymb}	% Math symbols
-\usepackage{dsfont}						% Math symbols like R for reals...
-
-%========================================================================================
+%===========================================================
 % References' colors and PDF properties
-%========================================================================================
+%===========================================================
 \usepackage{hyperref}
 \hypersetup
 {
-    pdfauthor={Nice Author},
-    pdfsubject={Nice Paper},
+    pdfauthor={Rafael Serrano Quintero},
+    pdfsubject={Introduction to Matlab},
     colorlinks = {true},
-    linkcolor = {},
-    citecolor = {CitationsBlue}, %{RoyalBlue}
-    urlcolor = {CitationsBlue}, %{RoyalBlue}
+    linkcolor = {GreyishBlue},
+    citecolor = {CitationsBlue},
+    urlcolor = {LinksPink},
+    filecolor = {LinksPink}
 }
-
-%========================================================================================
+%===========================================================
 % Additional packages
-%========================================================================================
+%===========================================================
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{calc,fadings,arrows,shapes}
 \usepackage{longtable}
 \usepackage{appendix}
 \usepackage{marvosym}
-\usepackage{enumerate} %For enumerating with letters with option [a)]
 \usepackage{epstopdf}
+\usepackage[round]{natbib}
+% Change manually the color of the parenthesis
+\bibpunct{\textcolor{CitationsBlue}{(}}{\textcolor{CitationsBlue}{)}}{,}{a}{}{;}
+
 \usepackage[flushleft]{threeparttable}
 \usepackage{booktabs}
 \usepackage[super]{nth}
 \usepackage{float}
-\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multicol}
 
-%========================================================================================
+%===========================================================
 % Stata Preamble for Tables
-%========================================================================================
+%===========================================================
 
 \newcommand{\sym}[1]{\rlap{#1}}% Thanks to David Carlisle
 
@@ -106,9 +139,9 @@
 	\newcommand{\specialcell}[2][c]{%
 	\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
 
-% *****************************************************************
+%*****************************************************************
 % Custom subcaptions
-% *****************************************************************
+%*****************************************************************
 % Note/Source/Text after Tables
 \newcommand{\figtext}[1]{
 	\vspace{-1.9ex}
@@ -122,9 +155,9 @@
 % Add significance note with \starnote
 \newcommand{\starnote}{\figtext{* p < 0.1, ** p < 0.05, *** p < 0.01. Standard errors in parentheses.}}
 
-% *****************************************************************
+%*****************************************************************
 % siunitx
-% *****************************************************************
+%*****************************************************************
 \usepackage{siunitx} % centering in tables
 	\sisetup{
 		detect-mode,
@@ -137,39 +170,268 @@
 		table-align-text-post   = false
         }
 
-\newcommand{\source}[1]{\caption*{\tiny Note: {#1}} }
+% Code highlighting
+\usepackage{fancyvrb}  %To reduce font size in verbatim environment
+\usepackage{listings}
 
-%========================================================================================
+\lstloadlanguages{[LaTeX]TeX}%
+\lstset{
+    language=Matlab,
+    basicstyle=\footnotesize\ttfamily,
+    backgroundcolor=\color{BeigeBackground}, 
+    breaklines=true,                 
+    captionpos=b,                    
+    commentstyle=\color{gray},   
+    frame=none,
+    keywordstyle=[1]\color{BlueKeyWord}\bfseries,
+    keywordstyle=[2]\color{Purple},
+    keywordstyle=[3]\color{Purple}\underbar,
+    stringstyle=\color{Purple},   
+    morekeywords={xlim,ylim,var,alpha,factorial,poissrnd,normpdf,normcdf,ones},
+    morekeywords=[2]{all, on, off, interp},
+    morecomment=[s]{\%\{}{\%\}},
+    numbers=left,                    
+    numbersep=3pt,                   
+    numberstyle=\tiny\color{black},
+    rulecolor=\color{black},        
+    showspaces=false,               
+    showstringspaces=false,          
+    showtabs=false,                  
+    stepnumber=1,                    
+    tabsize=2         
+}
+
+%===========================================================
 % DOCUMENT
-%========================================================================================
+%===========================================================
 
 \begin{document}
-\title[]{\textbf{Nice Title for Nice Presentation}}
-\author[Nice Author]{\textbf{Nice Author} \\
-Department of the Cool \\
-Cool People University}
-\date[]{}
+\title[]{Nice Title for Nice Presentation}
+\author{First Author\inst{1} \and
+Second Author\inst{2} \and
+Third Author\inst{3}}
+
+\institute{\inst{1} Institution One \and \inst{2} Institution Two \and \inst{3} Institution Three}
+\date{}
 
 \AtBeginSection[]{\frame{\sectionpage}}
 \AtBeginSubsection[]{\frame{\subsectionpage}}
+
+\defbeamertemplate{section page}{mine}[1][]{%
+  \begin{centering}
+    {\usebeamerfont{section name}\usebeamercolor[fg]{section name}#1}
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=12pt,center]{part title}
+      \usebeamerfont{section title}\insertsection\par
+    \end{beamercolorbox}
+  \end{centering}
+}
+
+\defbeamertemplate{subsection page}{mine_sub}[1][]{%
+  \begin{centering}
+    {\usebeamerfont{subsection name}\usebeamercolor[fg]{subsection name}#1}
+    \vskip1em\par
+    \begin{beamercolorbox}[sep=12pt,center]{part title}
+      \usebeamerfont{subsection title}\insertsubsection\par
+    \end{beamercolorbox}
+  \end{centering}
+}
+
+\setbeamertemplate{section page}[mine]
+\setbeamertemplate{subsection page}[mine_sub]
 
 \begin{frame}
 	\titlepage
 \end{frame}
 
-\section{Literature}
+\begin{frame}
+	\frametitle{Title for Slide}
 
-\begin{frame}{Related literature}
-	\begin{itemize}
-		\item \textbf{Sectoral productivity in India:}~\citep{rodrik2004hindugrowth,sivasubramonian2004humancapital,hsieh2009misallocation,broadberry2010historical,eichengreen2011servicegrowth,verma2012tfp,ziebarth2013misallocation,garciasantana2014reservationlaws}.
-		\item \textbf{Structural change and skill:}~\citep{buera2018skillbiasedstructchange,herrendorf2018humancapital,herrendorf2019China,herrendorf2015endogenous}.
-		\item \textbf{Structural change and services:}~\citep{buera2012service,duernecker2017structural,duarte2019pricesproductivity}.
-		\item \textbf{Structural transformation and aggregate productivity:}~\citep{ngai2007structural,restuccia2008aggregateproductivity,duarte2010aggregateproductivity,rodrik2016premature,mcmillanrodrik2014africa}.
-	\end{itemize}
+A titled slide.
+
+Maybe some \alert{\textbf{alert instructions}}
+
+\end{frame}
+
+\section{Typesetting}
+
+\begin{frame}[fragile]
+	\frametitle{Typesetting}
+
+\begin{itemize}
+	\item The main fonts are set with \verb;FiraSans; and keep \verb;professionalfonts;.
+	\item In this theme we have \emph{emphasized}, \alert{alerted}, and \textbf{bold} text.
+	\item Citations and links are colored differently. \citet{acemoglu2008capitaldeepening} is a citation, while \href{https://github.com/rafserqui}{this is a link}.
+\end{itemize}
+\end{frame}
+
+\section{Math}
+
+\begin{frame}
+	\frametitle{Math}
+\begin{itemize}
+	\item Inline equations such as $e^{i \pi} + 1 = 0$
+	\item Centered equations can be unnumbered.
+	\[
+	\int f(x)dx = F(x)
+	\]
+	\item Or numbered and aligned
+	\begin{align}
+        \underset{\vec{K}}{\max} \phantom{\Omega} & \int_0^{\infty} U(C_t) e^{-it} dt \label{eqn:objective} \\
+        \text{such that } & C_t = Y_t - \dot{K}_t = F(K_t,L_t,t) - \dot{K}_t \label{eqn:constraint}
+    \end{align}
+\end{itemize}
+\end{frame}
+
+\section{Blocks and Lists}
+
+\begin{frame}
+	\frametitle{Blocks}
+\begin{block}{Block}
+Regular block. Notice no visible box around the block. Keep it simple.
+\end{block}
+
+\begin{alertblock}{Alert Block}
+This is an alert block. Again, no boxes around.
+\end{alertblock}
+
+\begin{exampleblock}{Example Block}
+This is an example block. No boxes either.
+\end{exampleblock}
 \end{frame}
 
 \begin{frame}
-\citet{turnovsky2016population}. \cite{arnold2016servicesreform}
+	\frametitle{Theorems}
+\begin{theorem}
+Suppose $g(x)$ is a given, continuous function defined on $[a,b]\subseteq\mathbb{R}$. If
+	\[
+	\int_a^b \eta(x)g(x) dx = 0
+	\]
+for every continuous function $\eta(x)$ defined on $[a,b]$ and satisfying $\eta(a) = \eta(b) = 0$ then, $g(x) = 0$ for $a\leq x\leq b$
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Lists}
+	\begin{columns}[t, onlytextwidth]
+		\column{0.33\textwidth}
+			Items:
+			\begin{itemize}
+				\item Item 1
+				\begin{itemize}
+					\item Subitem 1.1
+					\item Subitem 1.2
+				\end{itemize}
+				\item Item 2
+				\item Item 3
+			\end{itemize}
+		
+		\column{0.33\textwidth}
+			Enumerations:
+			\begin{enumerate}
+				\item First
+				\item Second
+				\begin{enumerate}
+					\item Sub-first
+					\item Sub-second
+				\end{enumerate}
+				\item Third
+			\end{enumerate}
+		
+		\column{0.33\textwidth}
+			Descriptions:
+			\begin{description}
+				\item[First] Yes.
+				\item[Second] No.
+				\item[Third] Maybe?
+			\end{description}
+	\end{columns}
+\end{frame}
+
+\section{Figures and Tables}
+
+\begin{frame}{Figures and Tables}
+	\begin{columns}
+		\column{0.4\textwidth}
+			\begin{figure}
+				\centering
+				\includegraphics[width=\textwidth]{example-image-a}
+				\caption{Figure Caption}
+				\label{fig:example_fig}
+			\end{figure}
+			
+		\column{0.6\textwidth}
+		\begin{table}[htbp]
+			\centering
+			\caption{Table Caption}
+			\label{tab:calibration}
+			\scalebox{0.92}{
+			\begin{tabular}{@{}rcc@{}}
+				\toprule
+					& Heading 1 & Heading 2 \\\midrule
+				Row 1 & \(v_{11}\) & \(v_{12}\) \\
+				Row 2 & \(v_{21}\) & \(v_{22}\) \\
+				Row 3 & \(v_{31}\) & \(v_{32}\) \\ \bottomrule
+			\end{tabular}
+			}
+		\end{table}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{TikZ Figures}
+\begin{columns}
+	\begin{column}{0.5\textwidth}
+		\begin{figure}
+			\centering
+			\begin{tikzpicture}[scale=0.5]
+				\draw[thick,<->] (0,10) node[left]{$\delta k$, $sf(k)$}--(0,0)--(10,0) node[right]{$k$};
+				\node [below left] at (0,0) {$0$};
+				\draw(0,0)--(9,9) node[right]{$\delta k$};
+				\draw(0,0) ..controls (1,5) and (5,6) .. (10,7) node[right]{$sf(k)$};
+			\end{tikzpicture}
+			\caption{A TikZ Figure Caption}
+			\label{fig:tikz_figure}
+		\end{figure}
+	\end{column}
+	\begin{column}{0.5\textwidth}
+		\pgfdeclarelayer{background}
+		\pgfsetlayers{background,main}
+		\tikzstyle{vertex}=[circle,fill=black!25,minimum size=20pt,inner sep=0pt]
+		\tikzstyle{selected vertex} = [vertex, fill=red!24]
+		\tikzstyle{edge} = [draw,thick,-]
+		\tikzstyle{weight} = [font=\small]
+		\tikzstyle{selected edge} = [draw,line width=5pt,-,red!50]
+		\tikzstyle{ignored edge} = [draw,line width=5pt,-,black!20]
+		\begin{figure}
+			\begin{tikzpicture}[scale=1.1, auto,swap]
+				% Draw a 7,11 network
+				% First we draw the vertices
+				\foreach \pos/\name in {{(0,2)/a}, {(2,1)/b}, {(4,1)/c},
+										{(0,0)/d}, {(3,0)/e}, {(2,-1)/f}, {(4,-1)/g}}
+					\node[vertex] (\name) at \pos {$\name$};
+				% Connect vertices with edges and draw weights
+				\foreach \source/ \dest /\weight in {b/a/7, c/b/8,d/a/5,d/b/9,
+													 e/b/7, e/c/5,e/d/15,
+													 f/d/6,f/e/8,
+													 g/e/9,g/f/11}
+					\path[edge] (\source) -- node[weight] {$\weight$} (\dest);
+				% Start animating the vertex and edge selection. 
+				\foreach \vertex / \fr in {d/1,a/2,f/3,b/4,e/5,c/6,g/7}
+					\path<\fr-> node[selected vertex] at (\vertex) {$\vertex$};
+				% For convenience we use a background layer to highlight edges
+				% This way we don't have to worry about the highlighting covering
+				% weight labels. 
+				\begin{pgfonlayer}{background}
+					\pause
+					\foreach \source / \dest in {d/a,d/f,a/b,b/e,e/c,e/g}
+						\path<+->[selected edge] (\source.center) -- (\dest.center);
+					\foreach \source / \dest / \fr in {d/b/4,d/e/5,e/f/5,b/c/6,f/g/7}
+						\path<\fr->[ignored edge] (\source.center) -- (\dest.center);
+				\end{pgfonlayer}
+			\end{tikzpicture}
+		\end{figure}
+	\end{column}
+\end{columns}
 \end{frame}
 
 \begin{frame}<beamer:0>
