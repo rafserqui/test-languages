@@ -2,7 +2,7 @@ using Plots
 
 
 x = range(0, 3π, 1000)
-y = sin.(x)
+y = sin.(2 * x .- 1)
 
-plot(x, y)
+plot(x, [y, 3y])
 
