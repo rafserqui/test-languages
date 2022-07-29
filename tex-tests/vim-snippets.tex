@@ -1,0 +1,136 @@
+%========================================================================================
+% Compilation should work with PDFLaTeX
+%========================================================================================
+% Type of document and general formatting
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\linespread{1.25}
+
+%========================================================================================
+% These packages are for language and font settings
+\usepackage[english,activeacute]{babel} % Language
+\usepackage{tgpagella}					% Text font
+\usepackage[utf8]{inputenc}			% Special symbols
+\usepackage[T1]{fontenc}				% T1 Encoding of font
+\usepackage{lmodern}
+
+
+%========================================================================================
+%\usepackage[sc]{mathpazo}				% Math font
+\usepackage{mathpazo}				% Math font
+\usepackage{amsmath,amsfonts,amssymb}	% Math symbols
+\usepackage{dsfont}						% Math symbols like R for reals...
+\usepackage{amsthm} 
+
+%========================================================================================
+% Other packages
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage[svgnames]{xcolor}
+
+%========================================================================================
+\usepackage{accents}
+\newcommand*{\dt}[1]{%
+	\accentset{\mbox{\large\bfseries .}}{#1}} % Larger dot for time derivative
+
+
+\usepackage{hyperref}
+\hypersetup
+{
+    pdfauthor={Rafael Serrano-Quintero},
+    pdfsubject={NeoVim Snippets for Latex},
+    colorlinks = {true},
+    linkcolor = {FireBrick},
+    citecolor = {FireBrick},
+    urlcolor = {RoyalBlue},
+}
+
+\usepackage{appendix}
+\usepackage{marvosym}
+\usepackage{enumerate} %For enumerating with letters with option [a)]
+\usepackage{fancyvrb}  %To reduce font size in verbatim environment
+\usepackage{epstopdf}
+\usepackage[flushleft]{threeparttable}
+\usepackage{pdflscape}
+\usepackage{natbib}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage[super]{nth}
+\usepackage{float}
+
+% New commands
+\newcommand{\source}[1]{\caption*{\tiny Source: {#1}} }
+\newcommand{\keywords}[1]{\textbf{\textit{Keywords:}} #1}
+\newcommand{\jelcodes}[1]{\textbf{\textit{JEL Classification:}} #1}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{example}{Example}
+%========================================================================================
+					% === Title, thanks, and author data === %
+%========================================================================================
+
+
+\title{\textbf{NeoVim Latex --- Snippets from Vim-Snippets}
+\thanks{I should be updating this often as I become more accustumed to Vim}}
+
+\author{Rafael Serrano-Quintero}
+
+\begin{document}
+\maketitle	
+
+\section{Keybindings}
+
+\begin{itemize}
+  \item \verb|<leader>+lv| $\rightarrow$ Forward search, goes to line in PDF.
+  \item \verb|<leader>+ll| $\rightarrow$ Start/stop compilator.
+\end{itemize}
+
+\section{Sippets for Preamble}
+
+\begin{itemize}
+	\item \verb|dcl| $\rightarrow$ \verb|\documentclass{}|
+	\item \verb|dclo| $\rightarrow$ \verb|\documentclass[]{}|
+	\item \verb|nc| $\rightarrow$ \verb|\newcommand|
+	\item \verb|up| $\rightarrow$ \verb|\usepackage| 
+	\item \verb|nuc| $\rightarrow$ \verb|\newunicodecharacter|
+	\item \verb|dmo| $\rightarrow$ \verb|\DeclareMathOperator|
+\end{itemize}
+
+\section{Snippets for Document}
+
+\begin{itemize}
+	\item \verb|begin| $\rightarrow$ \verb|\begin{}...\end{}|
+	\item \verb|mkt| $\rightarrow$ \verb|\maketitle|
+	\item \verb|tab| $\rightarrow$ \verb|\begin{tabular}...\end{tabular}|
+	\item \verb|thm| $\rightarrow$ \verb|\begin[]{thm}...\end{thm}|
+	\item \verb|center| $\rightarrow$ \verb|\begin{center}...\end{center}|
+	\item \verb|ali| $\rightarrow$ \verb|\begin{align}...\end{align}|
+	\item \verb|gat| $\rightarrow$ \verb|\begin{gather}...\end{gather}|
+	\item \verb|enum| $\rightarrow$ \verb|\begin{enumerate}...\end{enumerate}|
+	\item \verb|enuma| $\rightarrow$ \verb|\begin{enumerate}[(a)]...\end{enumerate}|
+	\item \verb|enumi|  $\rightarrow$ \verb|\begin{enumerate}[(i)]...\end{enumerate}|
+	\item \verb|item| $\rightarrow$ \verb|\begin{itemize}...\end{itemize}|
+	\item \verb|desc| $\rightarrow$ \verb|\begin{description} \item \end{description}|
+\end{itemize}
+
+\section{Equation Snippets}
+
+\begin{itemize}
+	\item \verb|eq| $\rightarrow$ \verb|\begin{equation}...\end{equation}|
+	\item \verb|eql| $\rightarrow$ \verb|\begin{equation}...\label{eq:}\end{equation}|
+	\item \verb|\| $\rightarrow$ \verb|\[\]|
+	\item \verb|eqnarray| $\rightarrow$ \verb|\begin{eqnarray}...\end{eqnarray}|
+	\item \verb|lab| $\rightarrow$ \verb|\label{...}|
+\end{itemize}
+
+\begin{equation}
+  f(x) - x := g(x)  \label{eq:defined_eq}
+\end{equation}
+
+\begin{example}
+  This is an example of how to start a new environment.	
+\end{example}
+
+\end{document}
