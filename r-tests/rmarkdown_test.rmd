@@ -1,0 +1,52 @@
+---
+title: "Crecimiento Económico"
+subtitle: "Problemas VI"
+author:
+  name: "Rafael Serrano Quintero"
+  affiliation: "Universitat de Barcelona"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float: yes
+always_allow_html: true
+urlcolor: blue
+mainfont: cochineal
+sansfont: Fira Sans
+monofont: Fira Code
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE, dpi = 300)
+```
+
+```{r, cache=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+# Load necessary libraries
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(fixest)
+library(knitr)
+library(modelsummary)
+library(kableExtra)
+library(WDI)
+library(scales)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+# Color Palette
+colors <- wesanderson::wes_palette("Darjeeling1",
+                    5,
+                    type = "discrete")
+```
+
+```{r}
+colors
+```
+
+# Decrecimiento y Recursos Naturales
+
+## Comparativa de PIB per capita
+
+- Vamos a hacer el análisis para el año 2019, que es más claro.
+- En primer lugar vamos a calcular el PIB mediano en Europa, el mundo y vamos a comparar con España
