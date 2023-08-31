@@ -14,7 +14,7 @@ function cheb_polys(n, x)
     elseif n == 1
         T = x;
     else
-        T = 2 .* cheb_polys(n-1,x) .- cheb_polys(n-2, x);
+        T = 2 .* x .* cheb_polys(n-1,x) .- cheb_polys(n-2, x);
     end
     return T;
 end
