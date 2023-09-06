@@ -1,0 +1,46 @@
+---
+title: "Crecimiento Económico"
+subtitle: "The Very Long Run"
+author:
+  name: "Rafael Serrano Quintero"
+  affiliation: "Universitat de Barcelona"
+format:
+    html:
+        theme: [cerulean, ../custom.scss]
+        highlight-style: github
+        toc: true
+        embed-resources: true
+date: today
+date-format: "D MMMM, YYYY"
+execute: 
+  cache: true
+editor: 
+    render-on-save: true
+jupyter: julia-1.9
+---
+
+## Maddison Data for the Very Long Run
+
+
+```{julia}
+using XLSX, DataFrames
+using Gadfly, Printf
+
+# Read data
+df = DataFrame(XLSX.readtable("mpd2020.xlsx", "Full data"));
+```
+
+```{julia}
+# Extract countries
+subset!(df, :countrycode => ByRow(x -> x in ["CHN", "USA", "GBR"]));
+subset!(df, :year => ByRow(x -> x >= 1500));
+
+plot(df, x = :year, y = :gdppc, color = :countrycode,
+    Geom.line, 
+    Guide.xlabel("Year"), Guide.ylabel("International \$"),
+    Guide.colorkey(title = "Country"),
+    Coord.cartesian(xmin = 1500, xmax = 2020),
+    Scale.color_discrete_manual("#CC0000", "#0066CC", "#FF8000"),
+    Scale.y_continuous(labels=x -> @sprintf("\$% dk", x / 1000))) # Add dollar sign and set it in thousands
+```
+

@@ -1,0 +1,63 @@
+---
+title: "Crecimiento Económico"
+subtitle: "The Very Long Run"
+author:
+  name: "Rafael Serrano Quintero"
+  affiliation: "Universitat de Barcelona"
+format:
+    html:
+        theme: [cerulean, ../custom.scss]
+        highlight-style: github
+        toc: true
+        embed-resources: true
+date: today
+date-format: "D MMMM, YYYY"
+execute: 
+  cache: true
+editor: 
+    render-on-save: true
+---
+
+## Maddison Data for the Very Long Run
+
+
+```{r}
+#| code-fold: true
+#| code-summary: "Código"
+#| output: false
+
+rm(list = ls())
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(scales)
+library(here)
+
+here::i_am("quarto-tests/quarto_r.qmd")
+
+# Read data
+df <- read_excel(here("quarto-tests/mpd2020.xlsx"), sheet = "Full data")
+```
+
+```{r}
+head(df)
+```
+
+- Plot long run GDP per capita for Great Britain, China, and the US.
+
+```{r}
+colors <- c("#CC0000", "#0066CC", "#FF8000")
+
+df %>%
+    filter(countrycode %in% c("GBR", "CHN", "USA")) %>%
+    filter(year >= 1500) %>%
+    ggplot(aes(x = year, y = gdppc, color = countrycode)) +
+        geom_point(aes(shape = countrycode), size = 0.8, alpha = 0.4) +
+        geom_line(aes(linetype = countrycode)) +
+        labs(x = "Year", y = "International $",
+            color = "Country", shape = "Country",
+            linetype = "Country") +
+        scale_y_continuous(labels = scales::label_dollar()) +
+        scale_color_manual(values = colors) +
+        theme_minimal()
+```
