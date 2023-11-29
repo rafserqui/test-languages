@@ -1,205 +1,25 @@
-\documentclass[11pt,xcolor={svgnames},aspectratio=169,usepdftitle=false]{beamer}
-
-% Add space in lists
-\let\toneitemize\itemize
-\let\ttwoitemize\enditemize
-\renewenvironment{itemize}{\toneitemize\addtolength{\itemsep}{0.7\baselineskip}}{\ttwoitemize}
-
-\let\toneenumer\enumerate
-\let\ttwoenumer\endenumerate
-\renewenvironment{enumerate}{\toneenumer\addtolength{\itemsep}{0.7\baselineskip}}{\ttwoenumer}
-
-% Alert color
-\setbeamercolor{alerted text}{fg=DarkOrange}
-
-% Itemize w bullets
-\setbeamertemplate{itemize items}{$\circ$}
-
-% Font size of title
-\setbeamerfont{title}{size=\huge}
-
-%===========================================================
-% Color specifications
-%===========================================================
-\definecolor{GreyishBlue}{HTML}{087E8B} 	% Headings color
-\definecolor{CitationsBlue}{HTML}{0E86D4}%{2B6684} 	% Color for citations
-\definecolor{LinksPink}{HTML}{ff0054}       % Color for links
-
-% Template for syntax highlighting
-\definecolor{BeigeBackground}{HTML}{fdf6e3}
-\definecolor{BlueKeyWord}{HTML}{268bd2}
-
-\setbeamercolor{palette primary}{bg=GreyishBlue,fg=white}
-\setbeamercolor{palette secondary}{bg=GreyishBlue,fg=white}
-\setbeamercolor{palette tertiary}{bg=GreyishBlue,fg=white}
-\setbeamercolor{palette quaternary}{bg=GreyishBlue,fg=white}
-\setbeamercolor{structure}{fg=GreyishBlue} % itemize, enumerate, etc
-\setbeamercolor{section in toc}{fg=GreyishBlue} % TOC sections
-\setbeamercolor{background canvas}{bg=white}
-\setbeamercolor{button}{bg=white, fg=GreyishBlue}
-
-%===========================================================
-% Language and font settings
-%===========================================================
-\usepackage[english,activeacute]{babel} % Language
-\usefonttheme{professionalfonts}		% Avoid overwriting fonts
-
-\usepackage[sfdefault,light]{FiraSans}
-\usepackage[utf8]{inputenc}				% Special symbols
-\usepackage[T1]{fontenc}				% T1 Encoding of font
-
-%===========================================================
-% Math font settings
-%===========================================================
-\usepackage{mathpazo}					% Math font
-\usepackage{amsmath,amsfonts,amssymb,amsthm}	% Math symbols
-\usepackage{dsfont}						% Math symbols like R for reals...
-
-%===========================================================
-% Numeration in environments
-%===========================================================
-\setbeamertemplate{theorems}[numbered]
-\undef{\definition}
-\newtheorem{definition}{Definition}
-\setbeamertemplate{definitions}[numbered]
-\setbeamertemplate{navigation symbols}{}
-\setbeamertemplate{caption}[numbered]
-\newtheorem{exercise}{Exercise}
-
-\usepackage{appendixnumberbeamer}
-
-%===========================================================
-% References' colors and PDF properties
-%===========================================================
-\usepackage{hyperref}
+\documentclass[11pt,xcolor={svgnames},aspectratio=169,usepdftitle=false,notheorems]{beamer}
+\usepackage{clean_style_beamer}  % Loads my formatting 
+\usepackage{colortbl}
+\addbibresource{bibtex-test.bib}
 \hypersetup
 {
-    pdfauthor={Rafael Serrano Quintero},
-    pdfsubject={Introduction to Matlab},
+    pdfauthor={Rafael Serrano-Quintero},
+    pdfsubject={Spatial Complementarities in Public Infrastructure and Structural Transformation in Brazil},
     colorlinks = {true},
-    linkcolor = {GreyishBlue},
-    citecolor = {CitationsBlue},
-    urlcolor = {LinksPink},
-    filecolor = {LinksPink}
+    linkcolor = {LightBlue},
+    citecolor = {LightGray},
+    urlcolor = {LightBlue},
+    filecolor = {LightBlue}
 }
-%===========================================================
-% Additional packages
-%===========================================================
-\usepackage{graphicx}
-\usepackage{tikz}
-\usetikzlibrary{calc,fadings,arrows,shapes}
-\usepackage{longtable}
-\usepackage{appendix}
-\usepackage{marvosym}
-\usepackage{epstopdf}
-\usepackage[round]{natbib}
-% Change manually the color of the parenthesis
-\bibpunct{\textcolor{CitationsBlue}{(}}{\textcolor{CitationsBlue}{)}}{,}{a}{}{;}
-
-\usepackage[flushleft]{threeparttable}
-\usepackage{booktabs}
-\usepackage[super]{nth}
-\usepackage{float}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{multicol}
-
-%===========================================================
-% Stata Preamble for Tables
-%===========================================================
-
-\newcommand{\sym}[1]{\rlap{#1}}% Thanks to David Carlisle
-
-\let\estinput=\input% define a new input command so that we can still flatten the document
-
-\newcommand{\estwide}[3]{
-		\vspace{.75ex}{
-			\begin{tabular*}
-			{\textwidth}{@{\hskip\tabcolsep\extracolsep\fill}l*{#2}{#3}}
-			\toprule
-			\estinput{#1}
-			\bottomrule
-			\addlinespace[.75ex]
-			\end{tabular*}
-			}
-		}
-
-\newcommand{\estauto}[3]{
-		\vspace{.75ex}{
-			\begin{tabular}{l*{#2}{#3}}
-			\toprule
-			\estinput{#1}
-			\bottomrule
-			\addlinespace[.75ex]
-			\end{tabular}
-			}
-		}
-
-% Allow line breaks with \\ in specialcells
-	\newcommand{\specialcell}[2][c]{%
-	\begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
-
-%*****************************************************************
-% Custom subcaptions
-%*****************************************************************
-% Note/Source/Text after Tables
-\newcommand{\figtext}[1]{
-	\vspace{-1.9ex}
-	\captionsetup{justification=justified,font=footnotesize}
-	\caption*{\hspace{6pt}\hangindent=1.5em #1}
-	}
-\newcommand{\fignote}[1]{\caption*{\footnotesize\emph{Note:~}~#1}}
-
-\newcommand{\figsource}[1]{\figtext{\emph{Source:~}~#1}}
-
-% Add significance note with \starnote
-\newcommand{\starnote}{\figtext{* p < 0.1, ** p < 0.05, *** p < 0.01. Standard errors in parentheses.}}
-
-%*****************************************************************
-% siunitx
-%*****************************************************************
-\usepackage{siunitx} % centering in tables
-	\sisetup{
-		detect-mode,
-		tight-spacing           = true,
-		group-digits            = false ,
-		input-signs             = ,
-		input-symbols           = ( ) [ ] - + *,
-		input-open-uncertainty  = ,
-		input-close-uncertainty = ,
-		table-align-text-post   = false
-        }
-
-% Code highlighting
-\usepackage{fancyvrb}  %To reduce font size in verbatim environment
-\usepackage{listings}
-
-\lstloadlanguages{[LaTeX]TeX}%
-\lstset{
-    language=Matlab,
-    basicstyle=\footnotesize\ttfamily,
-    backgroundcolor=\color{BeigeBackground}, 
-    breaklines=true,                 
-    captionpos=b,                    
-    commentstyle=\color{gray},   
-    frame=none,
-    keywordstyle=[1]\color{BlueKeyWord}\bfseries,
-    keywordstyle=[2]\color{Purple},
-    keywordstyle=[3]\color{Purple}\underbar,
-    stringstyle=\color{Purple},   
-    morekeywords={xlim,ylim,var,alpha,factorial,poissrnd,normpdf,normcdf,ones},
-    morekeywords=[2]{all, on, off, interp},
-    morecomment=[s]{\%\{}{\%\}},
-    numbers=left,                    
-    numbersep=3pt,                   
-    numberstyle=\tiny\color{black},
-    rulecolor=\color{black},        
-    showspaces=false,               
-    showstringspaces=false,          
-    showtabs=false,                  
-    stepnumber=1,                    
-    tabsize=2         
-}
+\usepackage{siunitx}
+\sisetup{input-open-uncertainty  = ,
+         input-close-uncertainty = ,
+         table-space-text-pre    = (,
+         table-space-text-post   = \sym{***},
+         table-align-text-pre    = false,
+         table-align-text-post   = false}
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
 
 %===========================================================
 % DOCUMENT
@@ -213,32 +33,6 @@ Third Author\inst{3}}
 
 \institute{\inst{1} Institution One \and \inst{2} Institution Two \and \inst{3} Institution Three}
 \date{}
-
-\AtBeginSection[]{\frame{\sectionpage}}
-\AtBeginSubsection[]{\frame{\subsectionpage}}
-
-\defbeamertemplate{section page}{mine}[1][]{%
-  \begin{centering}
-    {\usebeamerfont{section name}\usebeamercolor[fg]{section name}#1}
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=12pt,center]{part title}
-      \usebeamerfont{section title}\insertsection\par
-    \end{beamercolorbox}
-  \end{centering}
-}
-
-\defbeamertemplate{subsection page}{mine_sub}[1][]{%
-  \begin{centering}
-    {\usebeamerfont{subsection name}\usebeamercolor[fg]{subsection name}#1}
-    \vskip1em\par
-    \begin{beamercolorbox}[sep=12pt,center]{part title}
-      \usebeamerfont{subsection title}\insertsubsection\par
-    \end{beamercolorbox}
-  \end{centering}
-}
-
-\setbeamertemplate{section page}[mine]
-\setbeamertemplate{subsection page}[mine_sub]
 
 \begin{frame}
 	\titlepage
@@ -261,7 +55,7 @@ Maybe some \alert{\textbf{alert instructions}}
 \begin{itemize}
 	\item The main fonts are set with \verb;FiraSans; and keep \verb;professionalfonts;.
 	\item In this theme we have \emph{emphasized}, \alert{alerted}, and \textbf{bold} text.
-	\item Citations and links are colored differently. \citet{acemoglu2008capitaldeepening} is a citation, while \href{https://github.com/rafserqui}{this is a link}.
+	\item Citations and links are colored differently. \textcite{acemoglu2008capitaldeepening} is a citation, while \href{https://github.com/rafserqui}{this is a link}.
 \end{itemize}
 \end{frame}
 

@@ -1,7 +1,0 @@
-\frametitle{Typesetting}
-
-\begin{itemize}
-	\item The main fonts are set with \verb;FiraSans; and keep \verb;professionalfonts;.
-	\item In this theme we have \emph{emphasized}, \alert{alerted}, and \textbf{bold} text.
-	\item Citations and links are colored differently. \citet{acemoglu2008capitaldeepening} is a citation, while \href{https://github.com/rafserqui}{this is a link}.
-\end{itemize}
