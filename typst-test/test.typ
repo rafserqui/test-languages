@@ -14,7 +14,7 @@
 
 = Introduction
 
-This is the first paragraph of a random paper. I'm testing citations as in @acemoglu2001origins which uses the `@` command. Alternatively, I could use the `#cite()` function as in #cite("rodrik2012convergence").
+This is the first paragraph of a random paper. I'm testing citations as in @acemoglu2001origins which uses the `@` command. Alternatively, I could use the `#cite()` function as in #cite(<rodrik2012convergence>).
 
 The following block of code indents paragraphs, lists, and numbered lists.
 
@@ -51,3 +51,4 @@ Numbered lists are also indented.
 + Item 5
 
 #bibliography("growth_biblio.bib", style: "chicago-author-date")
+
